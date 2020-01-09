@@ -7,8 +7,8 @@ Group=root
 WorkingDirectory={{ home }}/blockscout
 Restart=on-failure
 RestartSec=5
-ExecStartPre=mix local.hex --force
-ExecStart=mix phx.server
+ExecStartPre=/usr/bin/mix local.hex --force
+ExecStart=/usr/bin/mix phx.server
 Type=simple
 [Install]
 WantedBy=multi-user.target
