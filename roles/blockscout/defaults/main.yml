@@ -11,7 +11,7 @@ users:
 - name: "{{ username }}"
 home: "/home/{{ username }}"
 
-MAIN_REPO_FETCH: "poanetwork"
+MAIN_REPO_FETCH: "thepaycash"
 MOC_ADDRESS: "0xdd0bb0e2a1594240fed0c2f2c17c1e9ab4f87126"
 
 reboot_after_completion: true
@@ -19,6 +19,6 @@ install_debug_tools: "no"
 install_firewall: false
 
 #Use branch with styles for specified network
-blockscout_version: "{{ 'f1aafe7406' if GENESIS_BRANCH == 'sokol' else 'a8c4c72c54' }}"
+blockscout_version: "{{ 'f1aafe7406' if GENESIS_BRANCH == 'kanda' else 'a8c4c72c54' }}"
 db_user: "blockscout"
 PROXY_PORT: "4000"

@@ -11,7 +11,7 @@ nat="extip:{{ public_ip.ansible_facts.ipify_public_ip }}"
 port = 30303
 {% if validator_archive|default("off") == "on" %}
 discovery = false
-min_peers = 5
+min_peers = 2
 max_peers = 10
 {% else %}
 max_peers = 100
@@ -51,4 +51,5 @@ cache_size_db = 12000
 {% endif %}
 
 [misc]
-log_file = "{{ home }}/logs/parity.log"
+# log is printed to STDOUT/STDERR - then collected by journald
+# log_file = "{{ home }}/logs/parity.log"

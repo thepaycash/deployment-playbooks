@@ -1,8 +1,10 @@
 ---
 
-GENESIS_NETWORK_NAME: "PoA"
-PARITY_BIN_LOC: "https://s3.us-east-2.amazonaws.com/poa-builds-parity-published/1.10.6/parity"                                          
-PARITY_BIN_SHA256: "539f4788fbd605a9cd87b5bf747b27ae05b8a4080b26aa3da645b0446fa9f9cc"
+GENESIS_NETWORK_NAME: "Kanda"
+
+PARITY_BIN_LOC: "https://releases.parity.io/ethereum/v2.7.2/x86_64-unknown-linux-gnu/parity"
+PARITY_BIN_SHA256: "fe992f0c9b229a4406e82b9ff6d388f4acb4d6ce2782cb79b7bc379e7965ae34"
+
 ORCHESTRATOR_BIN_LOC: ""                                                                                                                
 ORCHESTRATOR_BIN_SHA256: ""
  

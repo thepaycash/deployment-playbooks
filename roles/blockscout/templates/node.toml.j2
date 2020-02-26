@@ -32,4 +32,5 @@ pruning = "archive"
 fat_db = "on"
 
 [misc]
-log_file = "{{ home }}/parity.log"
+# disabled logging, because node writes to STDOUT/STDERR, this info is redirected to /var/log/syslog and rotates
+# log_file = "{{ home }}/parity.log"

@@ -15,29 +15,29 @@
     content: "{{ MINING_KEYFILE }}"
     dest: "{{ home }}/parity_data/keys/{{ GENESIS_NETWORK_NAME }}/validator.key.{{ MINING_ADDRESS }}"
 
-- name: Clone poanetworks/poa-scripts-validator repo from GitHub
+- name: Clone poanetworks/scripts-validator repo from GitHub
   git:
-    repo: "https://github.com/{{ MAIN_REPO_FETCH }}/poa-scripts-validator"
-    dest: "{{ home }}/poa-scripts-validator"
+    repo: "https://github.com/{{ MAIN_REPO_FETCH }}/scripts-validator"
+    dest: "{{ home }}/scripts-validator"
     version: "{{ SCRIPTS_VALIDATOR_BRANCH }}"
     force: yes
 
 - name: Link node.toml file
   file:
     src: "{{ home }}/node.toml"
-    dest: "{{ home }}/poa-scripts-validator/node.toml"
+    dest: "{{ home }}/scripts-validator/node.toml"
     owner: "{{ username }}"
     group: "{{ username }}"
     state: link
 
-- name: Set up owner and group on poa-scripts-validator files
-  file: path={{ home }}/poa-scripts-validator owner={{ username }} group={{ username }} recurse=yes
+- name: Set up owner and group on scripts-validator files
+  file: path={{ home }}/scripts-validator owner={{ username }} group={{ username }} recurse=yes
 
 - name: install npm transferRewardToPayoutKey
   shell: npm install
   args:
-    chdir: "{{ home }}/poa-scripts-validator/transferRewardToPayoutKey"
-    creates: "{{ home }}/poa-scripts-validator/transferRewardToPayoutKey/node_modules"
+    chdir: "{{ home }}/scripts-validator/transferRewardToPayoutKey"
+    creates: "{{ home }}/scripts-validator/transferRewardToPayoutKey/node_modules"
   become: true
   become_user: "{{ username }}"
 

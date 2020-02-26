@@ -3,11 +3,18 @@
 - name: Create node.toml
   template: src=node.toml.j2 dest={{ home }}/node.toml owner={{ username }} group={{ username }} mode=0644
 
-- name: Clone poanetwork/blockscout repo from GitHub
+- debug:
+        msg: "Cloning https://github.com/{{ MAIN_REPO_FETCH }}/blockscout, version: {{ blockscout_version }}"
+
+- name: Clone thepaycash/blockscout repo from GitHub
   git:
     repo: "https://github.com/{{ MAIN_REPO_FETCH }}/blockscout"
     dest: "{{ home }}/blockscout"
+#   version: " version of the repository to check out. This can be the literal string "HEAD",
+#   a branch name, a tag name. It can also be a SHA-1 hash, in which case refspec needs to be specified
+#   if the given revision is not already available.
     version: "{{ blockscout_version }}"
+    force: yes
 
 - name: Add explorer dev.secret
   template:
@@ -37,8 +44,17 @@
     dest: '{{ home }}/blockscout/apps/block_scout_web/config/config.exs'
     state: present
     regexp: "^.*SUBNETWORK"
-    line: '  subnetwork: "POA Core",'
+    line: '  subnetwork: "Kanda Core",'
   when: GENESIS_BRANCH == "core"
+
+- name: Update default network name (for kanda testnet network)
+  lineinfile:
+    dest: '{{ home }}/blockscout/apps/block_scout_web/config/config.exs'
+    state: present
+    regexp: "^.*SUBNETWORK"
+    line: '  subnetwork: "Kanda Testnet",'
+  when: GENESIS_BRANCH == "kanda"
+
 
 - name: Install dependencies
   shell: cd {{ home }}/blockscout && mix local.hex --force && mix do deps.get, local.rebar --force, deps.compile, compile

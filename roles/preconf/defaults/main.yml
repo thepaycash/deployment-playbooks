@@ -1,13 +1,13 @@
 ---
 
-username: "poa"
+username: "kanda"
 users:
   - name: "{{ username }}"
 home: "/home/{{ username }}"
 
-GENESIS_NETWORK_NAME: "PoA"
-MAIN_REPO_FETCH: "poanetwork"
-GENESIS_BRANCH: "master"
+GENESIS_NETWORK_NAME: "Kanda"
+MAIN_REPO_FETCH: "thepaycash"
+GENESIS_BRANCH: "kanda"
 
 spec_json: ""
 bootnodes_txt: ""

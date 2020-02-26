@@ -18,6 +18,7 @@
     cache_valid_time: 3600
   with_items:
   - esl-erlang
+  - erlang-crypto
   - elixir
 
 - name: Add PostgreSQL signing key
@@ -44,6 +45,7 @@
   - libpng-dev
   - zlib1g-dev
   - inotify-tools
+  - libgmp-dev
 
 - name: Install python-psycopg2
   pip:

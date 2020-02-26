@@ -51,4 +51,5 @@ cache_size_db = 12000
 {% endif %}
 
 [misc]
-log_file = "{{ home }}/logs/parity.log"
+# log is printed to STDOUT/STDERR - then collected by journald
+# log_file = "{{ home }}/logs/parity.log"
