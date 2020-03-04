@@ -1,0 +1,128 @@
+- hosts: moc
+  vars:
+    username: "moc"
+    home: "/home/{{ username }}"
+    # allow_validator_ssh: true
+    moc_archive: "off"
+    install_debug_tools: "yes"
+    reboot_after_completion: false
+    NODE_FULLNAME: "moc"
+    NODE_ADMIN_EMAIL: "hello@thepay.cash"
+    NETSTATS_SERVER: "http://172.31.39.77:3000"
+    NETSTATS_SECRET: "yobayoba"
+    MOC_KEYPASS: "yobta yobta rum rum huyak tam tam tee tee tam"
+    MOC_KEYFILE: '{"version":3,"id":"c2f4d078-c96d-4fcd-8e1d-10c78c8a9609","address":"5a13be1a8e5a84ca6ab1670e52269f0671681b6e","Crypto":{"ciphertext":"d3013b4356e441e46c702f34b7b66c11a61990f60faef4db84eb6ef4d1e5e13d","cipherparams":{"iv":"6ab06fdb4b152b5828aaa2ffb473c251"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"193dfcd0321b1ebc7a80ddacb2c5de696ea9bfb2ed9250d0fa151c45e480ff8f","n":8192,"r":8,"p":1},"mac":"83e039b76f1061bddb21ebfd453b618d6e00970521cd557ea47eca8952412ef8"}}'
+  become: True
+  roles:
+    - moc
+
+########################## VALIDATOR 1 ######################################
+- hosts: validator1
+  vars:
+    username: "validator"
+    home: "/home/validator"
+    # allow_validator_ssh: true
+    validator_archive: "off"
+    install_debug_tools: "yes"
+    reboot_after_completion: false
+    NODE_FULLNAME: "validator1"
+    NODE_ADMIN_EMAIL: "hello@thepay.cash"
+    NETSTATS_SERVER: "http://172.31.39.77:3000"
+    NETSTATS_SECRET: "yobayoba"
+    MINING_ADDRESS: "0xc69a5e6a082ae40015ef862f51e6097a35a4c162"
+    MINING_KEYFILE: '{"version":3,"id":"7f681dcd-cea4-44a0-8387-76943f783e0b","address":"c69a5e6a082ae40015ef862f51e6097a35a4c162","Crypto":{"ciphertext":"afc99c71749dac5291e7c158f55320ae359712b73e4420b5d1dc3662e7ad570c","cipherparams":{"iv":"540a63456f18cf3c0fe6fa5464e8f99b"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"b5b756a07078c64deaed8daa333c03d853fb0869549bbcebf029a00c8f46151f","n":8192,"r":8,"p":1},"mac":"80b9743e5170adf9966631ff78d88c223fadc86422b851c13ceda67b0d6eb10a"}}'
+    MINING_KEYPASS: "8NoNUpskbGkfs45OOlAA"
+  become: True
+  roles:
+    - validator
+
+########################## VALIDATOR 2 ######################################
+- hosts: validator2
+  vars:
+    NODE_FULLNAME: "validator2"
+    username: "validator"
+    home: "/home/validator"
+    # allow_validator_ssh: true
+    validator_archive: "off"
+    install_debug_tools: "yes"
+    reboot_after_completion: false
+    NODE_ADMIN_EMAIL: "hello@thepay.cash"
+    NETSTATS_SERVER: "http://172.31.39.77:3000"
+    NETSTATS_SECRET: "yobayoba"
+    MINING_KEYFILE: '{"version":3,"id":"26fe071d-7c00-4acf-bc61-87a7f09f303d","address":"9d31dd3bc4fae6a41e05bb60abf471beaae4a728","Crypto":{"ciphertext":"da8abfa3bc5a765d32cea96052cf491378ba9a0a97bcb303367fe2549cae4696","cipherparams":{"iv":"9ae35e3d95f689cafb309c82e762ccf8"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"d1fd82c7060152b35b2a130dace5cab6fbf93716c6396c637806a31393879b32","n":8192,"r":8,"p":1},"mac":"b7c9f8e65b11f9193bf7fb377ec868f86853e8a0a97e8ad09b27714a7ca262a5"}}'
+    MINING_ADDRESS: "0x9d31dd3bc4fae6a41e05bb60abf471beaae4a728"
+    MINING_KEYPASS: "998NoNUpskbGkfs45OOl"
+  become: True
+  roles:
+    - validator
+
+########################## VALIDATOR 3 ######################################
+- hosts: validator3
+  vars:
+    NODE_FULLNAME: "validator3"
+    username: "validator"
+    home: "/home/validator"
+    validator_archive: "off"
+    # allow_validator_ssh: true
+    install_debug_tools: "yes"
+    reboot_after_completion: false
+    NODE_ADMIN_EMAIL: "hello@thepay.cash"
+    NETSTATS_SERVER: "http://172.31.39.77:3000"
+    NETSTATS_SECRET: "yobayoba"
+    MINING_KEYFILE: '{"version":3,"id":"cfbdf733-68e8-47f0-b47f-55bae251dec9","address":"130140a58b2da341c102521544baa7b29ce145a2","Crypto":{"ciphertext":"de8e3ab5c0c7691d2e3506633176fbfab25341d030554be3d58f2f6ef3efdff5","cipherparams":{"iv":"1d19df0a3694c829bcb3107bdb05b928"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"e08be551f0f8b8a3d0e3cf4f0dd16de31d61012e09c7c2202249f0e84ad08ea7","n":8192,"r":8,"p":1},"mac":"0fa04d8729b55a5b09dbc2708ded3f4f90a8d66024097580b1748f2058c740a8"}}'
+    MINING_ADDRESS: "0x130140a58b2da341c102521544baa7b29ce145a2"
+    MINING_KEYPASS: "998NoNUpskbGkfs45881"
+  become: True
+  roles:
+    - validator
+
+################################################# PEERS IDs collect and copy to all nodes
+- name: Collect enode_id from all validators
+  hosts: validators_all, moc
+  tasks:
+    - name: get enode id from validators
+      shell: |
+        curl -s --data '{"method":"parity_enode","params":[],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545 | python -c 'import sys, json; print json.load(sys.stdin)["result"]'
+      register: enode_output
+    - set_fact:
+        enode_id: "{{ enode_output.stdout }}"
+
+- name: Copy gathered enodes to moc host
+  hosts: moc
+  become: yes
+  tasks:
+    - name: Fill bootnodes with values gathered from validators
+      copy:
+        content: "{{ (hostvars | map('extract', hostvars, 'enode_id') | join(\"\n\")) + \"\n\" }}"
+        dest: "/home/moc/bootnodes.txt"
+        owner: "moc"
+        mode: 0644
+    - name: Restart poa-parity service
+      systemd:
+        name: poa-parity
+        state: restarted
+    - name: Restart poa-netstats service
+      systemd:
+        name: poa-netstats
+        state: restarted
+
+- name: Copy gathered enodes to all validators bootnodes.txt files
+  hosts: validators_all
+  become: yes
+  tasks:
+    - name: Fill bootnodes with values gathered from validators
+      copy:
+        content: "{{ (hostvars | map('extract', hostvars, 'enode_id') | join(\"\n\")) + \"\n\" }}"
+        dest: "/home/validator/bootnodes.txt"
+        owner: "validator"
+        mode: 0644
+    - name: Restart poa-parity service
+      systemd:
+        name: poa-parity
+        state: restarted
+    - name: Restart poa-netstats service
+      systemd:
+        name: poa-netstats
+        state: restarted
+
+

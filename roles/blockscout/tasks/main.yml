@@ -16,6 +16,14 @@
     version: "{{ blockscout_version }}"
     force: yes
 
+- name: add username and password to explorer/config/dev.exs
+  lineinfile:
+    dest: '{{ home }}/blockscout/apps/explorer/config/dev.exs'
+    state: present
+    insertafter: "database: database,"
+    firstmatch: yes
+    line: '  username: "{{ db_user }}", password: "{{ db_user_password }}",'
+
 - name: Add explorer dev.secret
   template:
     src: dev.secret.j2
@@ -38,6 +46,16 @@
   with_items:
   - "{{ home }}/blockscout/apps/explorer/config/dev.exs"
   - "{{ home }}/blockscout/apps/indexer/config/dev.exs"
+
+- name: Set logging level from "debug" to "error"
+  replace:
+    path: '{{ item }}'
+    regexp: 'level\:\ \:debug,'
+    replace: "level: :error,"
+  with_items:
+  - "{{ home }}/blockscout/apps/explorer/config/dev.exs"
+  - "{{ home }}/blockscout/apps/indexer/config/dev.exs"
+
 
 - name: Update default network name (for Core network)
   lineinfile:

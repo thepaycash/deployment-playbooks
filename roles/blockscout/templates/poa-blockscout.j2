@@ -10,5 +10,6 @@ RestartSec=5
 ExecStartPre=/usr/bin/mix local.hex --force
 ExecStart=/usr/bin/mix phx.server
 Type=simple
+# Environment==http://IP_TO_ARCHIVE_NODE:8545
 [Install]
 WantedBy=multi-user.target
