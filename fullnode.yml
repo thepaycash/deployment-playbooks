@@ -1,0 +1,35 @@
+- hosts: fullnode
+  become: True
+  roles:
+    - fullnode
+
+- name: Collect enode_id from all validators
+  hosts: validators_all
+  tasks:
+    - name: get enode id from validators
+      shell: |
+        curl -s --data '{"method":"parity_enode","params":[],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545 | python -c 'import sys, json; print json.load(sys.stdin)["result"]'
+      register: enode_output
+    - set_fact:
+        enode_id: "{{ enode_output.stdout }}"
+
+- name: Copy gathered enodes to fullnode bootnodes.txt file
+  hosts: fullnode
+  become: yes
+  tasks:
+    - name: Fill bootnodes with values gathered from validators
+      copy:
+        content: "{{ (hostvars | map('extract', hostvars, 'enode_id') | join(\"\n\")) + \"\n\" }}"
+        dest: "/home/fullnode/bootnodes.txt"
+        owner: "fullnode"
+        mode: 0644
+    - name: Restart poa-parity service
+      systemd:
+        name: poa-parity
+        state: restarted
+    - name: Restart poa-netstats service
+      systemd:
+        name: poa-netstats
+        state: restarted
+
+

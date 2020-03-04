@@ -1,0 +1,56 @@
+[parity]
+chain = "spec.json"
+base_path = "parity_data"
+{% if validator_archive|default("off") == "on" %}
+auto_update = "all"
+{% endif %}
+
+[network]
+reserved_peers="{{ home }}/bootnodes.txt"
+nat="extip:{{ public_ip.ansible_facts.ipify_public_ip }}"
+port = 30303
+{% if validator_archive|default("off") == "on" %}
+discovery = false
+min_peers = 2
+max_peers = 10
+{% else %}
+max_peers = 100
+{% endif %}
+
+[rpc]
+disable = false
+port = 8545
+interface = "all"
+cors = ["all"]
+hosts = ["all"]
+apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "rpc", "shh", "shh_pubsub"]
+
+[websockets]
+disable = false
+port = 8546
+interface = "all"
+hosts = ["all"]
+origins = ["all"]
+apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "rpc", "shh", "shh_pubsub"]
+
+{% if fullnode_archive|default("off") == "on" %}
+[ui]
+disable = true
+
+[dapps]
+disable = true
+
+[snapshots]
+disable_periodic = false
+
+[footprint]
+tracing = "on"
+pruning = "archive"
+pruning_history = 1200
+fat_db = "on"
+cache_size_db = 12000
+{% endif %}
+
+[misc]
+# log is printed to STDOUT/STDERR - then collected by journald
+# log_file = "{{ home }}/logs/parity.log"

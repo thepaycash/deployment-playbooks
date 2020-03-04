@@ -1,0 +1,63 @@
+---
+# to verify ufw configuration run:
+# sudo ufw status verbose
+
+- name: Install ufw
+  package: name=ufw state=present
+
+# added to avoid "msg": "Timeout (12s) waiting for privilege escalation prompt: "
+# error when ufw is restarting (stopping all playbook processing)
+# TODO - check other way to correctly reconnect
+- name: Configure the kernel to keep connections alive when enabling the firewall
+  sysctl:
+    name: net.netfilter.nf_conntrack_tcp_be_liberal
+    value: 1
+    state: present
+    sysctl_set: yes
+    reload: yes
+
+- name: Clean old rules
+  ufw: state=reset
+
+- name: Configure ufw defaults
+  ufw: direction={{ item.direction }} policy={{ item.policy }}
+  with_items:
+    - { direction: 'incoming', policy: 'deny' }
+    - { direction: 'outgoing', policy: 'allow' }
+  notify:
+    - restart ufw
+
+- name: Add ufw ssh access
+  ufw: rule='allow' port='22' proto='tcp'
+  notify:
+    - restart ufw
+  when: allow_fullnode_ssh == true
+
+- name: Add RPC access
+  ufw: rule='allow' port='8545' proto='tcp'
+  notify:
+    - restart ufw
+  when: allow_fullnode_rpc == true
+
+- name: Add WebSockets access
+  ufw: rule='allow' port='8546' proto='tcp'
+  notify:
+    - restart ufw
+  when: allow_fullnode_ws == true
+
+- name: Add ufw p2p access
+  ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.proto }}
+  with_items:
+    - { rule: 'allow', port: '30303', proto: 'tcp' }
+    - { rule: 'allow', port: '30303', proto: 'udp' }
+  notify:
+    - restart ufw
+  when: allow_fullnode_p2p == true
+
+- name: Enable ufw logging
+  ufw: logging=off
+  notify:
+    - restart ufw
+
+- name: Enable ufw
+  ufw: state=enabled
